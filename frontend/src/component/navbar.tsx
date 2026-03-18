@@ -23,7 +23,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
               <Compass className="w-8 h-8 text-[#2A6F97]" />
-              <span className="text-xl font-semibold text-gray-900">Rihla</span>
+              <span className="text-xl font-semibold text-gray-900">Rihla-رِحلة</span>
             </Link>
 
             {/* Desktop Navigation */}
