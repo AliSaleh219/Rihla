@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import TripCard from "../component/TripCard";
-import { trips, governorates } from "../data/mockData";
+import { trips} from "../data/mockData";
 import { Plus, X, Upload, MapPin, Clock, DollarSign, Search, Sparkles } from "lucide-react";
+import { getGovernorates } from "../component/api";
 
 export default function Trips() {
   const [searchParams] = useSearchParams();
@@ -11,7 +12,15 @@ export default function Trips() {
   const [sortBy, setSortBy] = useState<string>("popularity");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const [governorates, setGovernorates] = useState([]);
+  useEffect(() => {
+    const fetchGovernorates = async () => {
+      const data = await getGovernorates();
+      setGovernorates(data.member);
+      console.log(data.member);
+    };
+    fetchGovernorates();
+  }, []);
   // Form state
   const [formData, setFormData] = useState({
     title: "",
@@ -173,7 +182,7 @@ export default function Trips() {
                 className="appearance-none px-6 py-3 pr-12 bg-white border-2 border-gray-200 rounded-full hover:border-[#2A6F97] focus:outline-none focus:ring-4 focus:ring-[#2A6F97]/20 focus:border-[#2A6F97] transition-all cursor-pointer font-medium text-gray-700"
               >
                 <option value="all">📍 All Locations</option>
-                {governorates.map((gov) => (
+                {governorates.map((gov: { id: string; name: string }) => (
                   <option key={gov.id} value={gov.name}>
                     {gov.name}
                   </option>
@@ -350,7 +359,7 @@ export default function Trips() {
                   className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-[#2A6F97]/20 focus:border-[#2A6F97] transition-all text-lg"
                 >
                   <option value="">Select governorate</option>
-                  {governorates.map((gov) => (
+                  {governorates.map((gov: { id: string; name: string }) => (
                     <option key={gov.id} value={gov.name}>
                       {gov.name}
                     </option>

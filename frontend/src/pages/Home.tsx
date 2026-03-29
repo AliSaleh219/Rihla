@@ -1,6 +1,21 @@
-import {  Globe, Heart, Shield } from "lucide-react";
-
+import {  Globe, Heart, MapPin, Shield,Star,TrendingUp } from "lucide-react";
+import { Link, useNavigate } from "react-router";
+import { trips} from "../data/mockData";
+import TripCard from "../component/TripCard";
+import { useEffect, useState } from "react";
+import { getGovernorates } from "../component/api";
+import GovernorateCard from "../component/GovernorateCard";
 export default function Home() {
+    const navigate = useNavigate();
+    const [governorates, setGovernorates] = useState([]);
+    useEffect(() => {
+      const fetchGovernorates = async () => {
+        const data = await getGovernorates();
+        setGovernorates(data.member);
+        console.log(data.member);
+      };
+      fetchGovernorates();
+    }, []);
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -76,6 +91,78 @@ export default function Home() {
           </p>
         </div>
       </section>
-      </div>
+      
+      {/* Featured Trips */}
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Featured Trips</h2>
+              <p className="text-gray-600">Handpicked experiences for you</p>
+            </div>
+            <Link
+              to="/trips"
+              className="text-[#2A6F97] hover:underline font-medium flex items-center gap-1"
+            >
+              View all
+              <Star className="w-4 h-4" />
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {trips.slice(0,3).map((trip) => (
+              <TripCard key={trip.id} {...trip} price={trip.price} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Explore by Governorate */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Explore by Governorate</h2>
+            <p className="text-gray-600">Discover regions across Syria</p>
+          </div>
+          <Link
+            to="/governorates"
+            className="text-[#2A6F97] hover:underline font-medium flex items-center gap-1"
+          >
+            View all
+            <MapPin className="w-4 h-4" />
+          </Link>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {governorates.slice(0,6).map((gov:{ id: string; nameEn: string; coverImage: string }) => (
+            <GovernorateCard
+              key={gov.id}
+              name={gov.nameEn}
+              image={`http://127.0.0.1:8000/images/provinces/${gov.coverImage}`}
+
+              onClick={() => navigate(`/trips?governorate=${gov.nameEn}`)}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Recommended for You */}
+      <section className="bg-gradient-to-br from-[#2A6F97]/10 to-[#6B8E23]/10 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <TrendingUp className="w-12 h-12 text-[#2A6F97] mx-auto mb-4" />
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Get Personalized Recommendations</h2>
+          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+            Let our AI-powered system suggest the perfect destinations based on your preferences and favorites
+          </p>
+          <Link
+            to="/recommendations"
+            className="inline-flex items-center gap-2 bg-[#2A6F97] text-white px-8 py-3 rounded-full hover:bg-[#2A6F97]/90 transition-colors shadow-lg"
+          >
+            <Star className="w-5 h-5" />
+            View Recommendations
+          </Link>
+        </div>
+      </section>
+    </div>
   );
 }
