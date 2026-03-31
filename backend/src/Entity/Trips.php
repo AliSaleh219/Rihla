@@ -42,10 +42,17 @@ class Trips
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'trip')]
     private Collection $bookings;
 
+    /**
+     * @var Collection<int, TripImage>
+     */
+    #[ORM\OneToMany(targetEntity: TripImage::class, mappedBy: 'trip')]
+    private Collection $tripImages;
+
     public function __construct()
     {
         $this->rating = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+        $this->tripImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -155,6 +162,36 @@ class Trips
             // set the owning side to null (unless already changed)
             if ($booking->getTrip() === $this) {
                 $booking->setTrip(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TripImage>
+     */
+    public function getTripImages(): Collection
+    {
+        return $this->tripImages;
+    }
+
+    public function addTripImage(TripImage $tripImage): static
+    {
+        if (!$this->tripImages->contains($tripImage)) {
+            $this->tripImages->add($tripImage);
+            $tripImage->setTrip($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTripImage(TripImage $tripImage): static
+    {
+        if ($this->tripImages->removeElement($tripImage)) {
+            // set the owning side to null (unless already changed)
+            if ($tripImage->getTrip() === $this) {
+                $tripImage->setTrip(null);
             }
         }
 
