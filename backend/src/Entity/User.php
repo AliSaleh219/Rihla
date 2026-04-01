@@ -66,10 +66,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $bookings;
 
     /**
-     * @var Collection<int, Favorite>
+     * @var Collection<int, UserPreference>
      */
-    #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'user')]
-    private Collection $favorites;
+    #[ORM\OneToMany(targetEntity: UserPreference::class, mappedBy: 'user')]
+    private Collection $userPreferences;
 
     public function __construct()
     {
@@ -78,7 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->is_verified = false;                  
         $this->is_active = true;
         $this->bookings = new ArrayCollection();
-        $this->favorites = new ArrayCollection();  
+        $this->userPreferences = new ArrayCollection();  
     }
 
     public function getId(): ?int
@@ -253,29 +253,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Favorite>
+     * @return Collection<int, UserPreference>
      */
-    public function getFavorites(): Collection
+    public function getUserPreferences(): Collection
     {
-        return $this->favorites;
+        return $this->userPreferences;
     }
 
-    public function addFavorite(Favorite $favorite): static
+    public function addUserPreference(UserPreference $userPreference): static
     {
-        if (!$this->favorites->contains($favorite)) {
-            $this->favorites->add($favorite);
-            $favorite->setUser($this);
+        if (!$this->userPreferences->contains($userPreference)) {
+            $this->userPreferences->add($userPreference);
+            $userPreference->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeFavorite(Favorite $favorite): static
+    public function removeUserPreference(UserPreference $userPreference): static
     {
-        if ($this->favorites->removeElement($favorite)) {
+        if ($this->userPreferences->removeElement($userPreference)) {
             // set the owning side to null (unless already changed)
-            if ($favorite->getUser() === $this) {
-                $favorite->setUser(null);
+            if ($userPreference->getUser() === $this) {
+                $userPreference->setUser(null);
             }
         }
 

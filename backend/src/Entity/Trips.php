@@ -60,6 +60,8 @@ class Trips
     #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'trip')]
     private Collection $favorites;
 
+    
+
     public function __construct()
     {
         $this->rating = new ArrayCollection();
@@ -271,4 +273,5 @@ class Trips
 
         return $this;
     }
+
 }
