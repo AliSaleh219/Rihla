@@ -65,12 +65,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'user')]
     private Collection $bookings;
 
-    /**
-     * @var Collection<int, UserPreference>
-     */
-    #[ORM\OneToMany(targetEntity: UserPreference::class, mappedBy: 'user')]
-    private Collection $userPreferences;
-
     public function __construct()
     {
         $this->rate = new ArrayCollection();
@@ -78,7 +72,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->is_verified = false;                  
         $this->is_active = true;
         $this->bookings = new ArrayCollection();
-        $this->userPreferences = new ArrayCollection();  
     }
 
     public function getId(): ?int
@@ -246,36 +239,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($booking->getUser() === $this) {
                 $booking->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, UserPreference>
-     */
-    public function getUserPreferences(): Collection
-    {
-        return $this->userPreferences;
-    }
-
-    public function addUserPreference(UserPreference $userPreference): static
-    {
-        if (!$this->userPreferences->contains($userPreference)) {
-            $this->userPreferences->add($userPreference);
-            $userPreference->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserPreference(UserPreference $userPreference): static
-    {
-        if ($this->userPreferences->removeElement($userPreference)) {
-            // set the owning side to null (unless already changed)
-            if ($userPreference->getUser() === $this) {
-                $userPreference->setUser(null);
             }
         }
 
