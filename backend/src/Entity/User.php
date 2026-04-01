@@ -65,13 +65,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'user')]
     private Collection $bookings;
 
+    /**
+     * @var Collection<int, Favorite>
+     */
+    #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'user')]
+    private Collection $favorites;
+
     public function __construct()
     {
         $this->rate = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable(); 
         $this->is_verified = false;                  
         $this->is_active = true;
-        $this->bookings = new ArrayCollection();  
+        $this->bookings = new ArrayCollection();
+        $this->favorites = new ArrayCollection();  
     }
 
     public function getId(): ?int
@@ -239,6 +246,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($booking->getUser() === $this) {
                 $booking->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favorite>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Favorite $favorite): static
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+            $favorite->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Favorite $favorite): static
+    {
+        if ($this->favorites->removeElement($favorite)) {
+            // set the owning side to null (unless already changed)
+            if ($favorite->getUser() === $this) {
+                $favorite->setUser(null);
             }
         }
 

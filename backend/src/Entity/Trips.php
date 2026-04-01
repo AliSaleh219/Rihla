@@ -54,12 +54,19 @@ class Trips
     #[ORM\OneToMany(targetEntity: ItineraryDay::class, mappedBy: 'trip')]
     private Collection $itineraryDays;
 
+    /**
+     * @var Collection<int, Favorite>
+     */
+    #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'trip')]
+    private Collection $favorites;
+
     public function __construct()
     {
         $this->rating = new ArrayCollection();
         $this->bookings = new ArrayCollection();
         $this->tripImages = new ArrayCollection();
         $this->itineraryDays = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -229,6 +236,36 @@ class Trips
             // set the owning side to null (unless already changed)
             if ($itineraryDay->getTrip() === $this) {
                 $itineraryDay->setTrip(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favorite>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Favorite $favorite): static
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+            $favorite->setTrip($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Favorite $favorite): static
+    {
+        if ($this->favorites->removeElement($favorite)) {
+            // set the owning side to null (unless already changed)
+            if ($favorite->getTrip() === $this) {
+                $favorite->setTrip(null);
             }
         }
 
