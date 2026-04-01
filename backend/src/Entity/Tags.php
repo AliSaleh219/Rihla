@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Enum\tagsEnum;
 use App\Repository\TagsRepository;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TagsRepository::class)]
+#[ApiResource]
 class Tags
 {
     #[ORM\Id]

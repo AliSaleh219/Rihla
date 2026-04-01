@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\TripImageRepository;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TripImageRepository::class)]
+#[ApiResource]
 class TripImage
 {
     #[ORM\Id]
