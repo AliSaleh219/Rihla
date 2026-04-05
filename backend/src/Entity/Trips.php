@@ -19,7 +19,7 @@ class Trips
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $tilte = null;
+    private ?string $title = null;
 
     #[ORM\ManyToOne(inversedBy: 'trips')]
     private ?Governorates $governorate = null;
@@ -76,14 +76,14 @@ class Trips
         return $this->id;
     }
 
-    public function getTilte(): ?string
+    public function getTitle(): ?string
     {
-        return $this->tilte;
+        return $this->title;
     }
 
-    public function setTilte(string $tilte): static
+    public function setTitle(string $title): static
     {
-        $this->tilte = $tilte;
+        $this->title = $title;
 
         return $this;
     }

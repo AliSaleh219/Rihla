@@ -18,11 +18,11 @@ class Rating
     #[ORM\Column]
     private ?int $rate = null;
 
-    #[ORM\ManyToOne(targetEntity: Trips::class, inversedBy: 'ratings')]
+    #[ORM\ManyToOne(targetEntity: Trips::class, inversedBy: 'rating')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Trips $trips = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'ratings')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'rate')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
