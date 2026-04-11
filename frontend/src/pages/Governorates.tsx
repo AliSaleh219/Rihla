@@ -3,14 +3,18 @@ import { useNavigate } from "react-router";
 import GovernorateCard from "../component/GovernorateCard";
 import { MapPin } from "lucide-react";
 import { getGovernorates } from "../component/api";
+import SkeletonProvinceCard from "../component/Skeleton/SkeletonProvinceCard";
 export default function Governorates() {
   const navigate = useNavigate();
   const [governorates, setGovernorates] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchGovernorates = async () => {
+      setLoading(true);
       const data = await getGovernorates();
       setGovernorates(data.member);
       console.log(data.member);
+      setLoading(false);
     };
     fetchGovernorates();
   }, []);
@@ -31,14 +35,22 @@ export default function Governorates() {
 
         {/* Governorates Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {governorates.map((gov: { id: string; nameEn: string; coverImage: string }) => (
-            <GovernorateCard
-              key={gov.id}
-              name={gov.nameEn}
-              image={`http://127.0.0.1:8000/images/provinces/${gov.coverImage}`}
-              onClick={() => navigate(`/trips?governorate=${gov.nameEn}`)}
-            />
-          ))}
+          {loading ? (
+            <>
+               {[...Array(14)].map((_, i) => (
+                    <SkeletonProvinceCard key={i}/>
+                ))}
+            </>
+          ) : (
+            governorates.map((gov: { id: string; nameEn: string; coverImage: string }) => (
+              <GovernorateCard
+                key={gov.id}
+                name={gov.nameEn}
+                image={`http://127.0.0.1:8000/images/provinces/${gov.coverImage}`}
+                onClick={() => navigate(`/trips?governorate=${gov.nameEn}`)}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>
