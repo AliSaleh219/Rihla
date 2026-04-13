@@ -14,7 +14,7 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Post;
 use App\Controller\TripMakerController;
-
+use App\Controller\TripDeleteController;
 #[ORM\Entity(repositoryClass: TripsRepository::class)]
 #[ApiResource(
     operations: [
@@ -25,7 +25,10 @@ use App\Controller\TripMakerController;
             ),
         new Get(),
         new Put(),
-        new Delete()
+        new Delete(
+            uriTemplate: '/trips/{id}',
+            controller: TripDeleteController::class,
+        )
     ]
 )]
 class Trips
