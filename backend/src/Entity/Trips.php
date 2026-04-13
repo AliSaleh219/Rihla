@@ -8,9 +8,26 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Post;
+use App\Controller\TripMakerController;
 
 #[ORM\Entity(repositoryClass: TripsRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Post(
+            uriTemplate: '/trips',
+            controller: TripMakerController::class,
+            ),
+        new Get(),
+        new Put(),
+        new Delete()
+    ]
+)]
 class Trips
 {
     #[ORM\Id]
