@@ -134,10 +134,11 @@ export default function Home() {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {governorates.slice(0,6).map((gov:{ id: string; nameEn: string; coverImage: string }) => (
+          {governorates.slice(0,6).map((gov:{ id: string;tripsCount:number ;nameEn: string; coverImage: string }) => (
             <GovernorateCard
               key={gov.id}
               name={gov.nameEn}
+              tripsCount={gov.tripsCount}
               image={`http://127.0.0.1:8000/images/provinces/${gov.coverImage}`}
 
               onClick={() => navigate(`/trips?governorate=${gov.nameEn}`)}

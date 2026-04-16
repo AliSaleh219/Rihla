@@ -31,7 +31,7 @@ export default function GovernorateCard({ name, image, tripsCount, onClick }: Go
       </div>  
       <div className={isDisabled ? 'bg-gray-200 px-4 py-3 flex flex-col gap-1' : 'bg-white px-4 py-3 flex flex-col gap-1'}>
         <h3 className={isDisabled ? 'text-gray-500 font-semibold text-lg truncate' : 'text-gray-900 font-semibold text-lg truncate'}>{name}</h3>
-        <span className={isDisabled ? 'text-gray-400 font-medium text-sm' : 'text-gray-600 font-medium text-sm'}>{tripsCount} Trips</span>
+        <span className={isDisabled ? 'text-gray-400 font-medium text-sm' : 'text-gray-600 font-medium text-sm'}>{tripsCount} Trips available</span>
       </div>
     </div>
   );
