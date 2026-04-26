@@ -5,9 +5,12 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RatingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: RatingRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['trip:read']]
+)]
 class Rating
 {
     #[ORM\Id]
@@ -16,6 +19,7 @@ class Rating
     private ?int $id = null;
 
     #[ORM\Column]
+    // #[Groups(['trip:read'])]
     private ?int $rate = null;
 
     #[ORM\ManyToOne(targetEntity: Trips::class, inversedBy: 'rating')]

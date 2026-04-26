@@ -14,7 +14,6 @@ final class TripMakerController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
     ) {}
-    #[Route('/trips', name: 'create_trip', methods: ['POST'])]
     public function __invoke(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -51,9 +50,6 @@ final class TripMakerController extends AbstractController
         $province->setTripsCount($province->getTripsCount() + 1);
         $this->entityManager->persist($trip);
         $this->entityManager->flush();
-        return $this->json([
-            'message' => 'Trip created successfully!',
-            'trip_id' => $trip->getId()
-        ], Response::HTTP_CREATED);
+        return $trip;
     }
 }

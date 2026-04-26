@@ -7,9 +7,10 @@ use App\Repository\GovernoratesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: GovernoratesRepository::class)]
-#[ApiResource]
+#[ApiResource()]
 class Governorates
 {
     #[ORM\Id]
@@ -18,6 +19,7 @@ class Governorates
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['trip:read'])]
     private ?string $nameEn = null;
 
     #[ORM\Column(length: 255)]

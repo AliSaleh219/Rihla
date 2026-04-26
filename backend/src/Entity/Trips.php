@@ -15,10 +15,11 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Post;
 use App\Controller\TripMakerController;
 use App\Controller\TripDeleteController;
+use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: TripsRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(),
+        new GetCollection(),        
         new Post(
             uriTemplate: '/trips',
             controller: TripMakerController::class,
@@ -29,55 +30,67 @@ use App\Controller\TripDeleteController;
             uriTemplate: '/trips/{id}',
             controller: TripDeleteController::class,
         )
-    ]
+    ],
+    normalizationContext: ['groups' => ['trip:read']],
+
 )]
 class Trips
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['trip:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['trip:read'])]
     private ?string $title = null;
 
     #[ORM\ManyToOne(inversedBy: 'trips')]
+    #[Groups(['trip:read'])]
     private ?Governorates $governorate = null;
 
     /**
      * @var Collection<int, Rating>
      */
     #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'trips')]
+    #[Groups(['trip:read'])]
     private Collection $rating;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['trip:read'])]
     private ?string $image = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['trip:read'])]
     private ?string $description = null;
 
     /**
      * @var Collection<int, Booking>
      */
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'trip')]
+    // #[Groups(['trip:read'])]
     private Collection $bookings;
 
     /**
      * @var Collection<int, TripImage>
      */
     #[ORM\OneToMany(targetEntity: TripImage::class, mappedBy: 'trip')]
+    // #[Groups(['trip:read'])]
     private Collection $tripImages;
 
     /**
      * @var Collection<int, ItineraryDay>
      */
     #[ORM\OneToMany(targetEntity: ItineraryDay::class, mappedBy: 'trip')]
+    // #[Groups(['trip:read'])]
     private Collection $itineraryDays;
 
     /**
      * @var Collection<int, Favorite>
      */
     #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'trip')]
+    // #[Groups(['trip:read'])]
     private Collection $favorites;
 
     
@@ -293,5 +306,18 @@ class Trips
 
         return $this;
     }
-
+    #[Groups(['trip:read'])]
+    public function getAverageRating(): float
+    {
+        if ($this->rating->isEmpty()) {
+            return 0;
+        }
+        
+        $total = 0;
+        foreach ($this->rating as $r) {
+            $total += $r->getRate();
+        }
+        
+        return round($total / $this->rating->count(), 1);
+    }
 }
