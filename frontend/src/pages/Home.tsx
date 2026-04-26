@@ -111,7 +111,7 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {trips.slice(0,3).map((trip) => (
-              <TripCard key={trip.id} {...trip} price={trip.price} />
+              <TripCard key={trip.id} trip={trip} />
             ))}
           </div>
         </div>

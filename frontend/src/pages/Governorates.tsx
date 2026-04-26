@@ -13,7 +13,6 @@ export default function Governorates() {
       setLoading(true);
       const data = await getGovernorates();
       setGovernorates(data.member);
-      console.log(data.member);
       setLoading(false);
     };
     fetchGovernorates();
