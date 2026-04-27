@@ -16,6 +16,9 @@ use ApiPlatform\Metadata\Post;
 use App\Controller\TripMakerController;
 use App\Controller\TripDeleteController;
 use Symfony\Component\Serializer\Attribute\Groups;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
 #[ORM\Entity(repositoryClass: TripsRepository::class)]
 #[ApiResource(
     operations: [
@@ -34,6 +37,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
     normalizationContext: ['groups' => ['trip:read']],
 
 )]
+#[ApiFilter(SearchFilter::class, properties: ['governorate.nameEn' => 'exact', 'tag' => 'partial'])]
+#[ApiFilter(RangeFilter::class, properties: ['price', 'maxtravelers', 'averageRating'])]
 class Trips
 {
     #[ORM\Id]
@@ -92,6 +97,28 @@ class Trips
     #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'trip')]
     // #[Groups(['trip:read'])]
     private Collection $favorites;
+    #[ORM\Column(type: 'decimal', precision: 3, scale: 1, options: ['default' => 0])]
+    #[Groups(['trip:read'])]
+    private float $averageRating = 0;
+    #[ORM\Column]
+    #[Groups(['trip:read'])]
+    private ?float $price = null;
+
+    #[ORM\Column]
+    #[Groups(['trip:read'])]
+    private ?int $maxtravelers = null;
+
+    #[ORM\Column]
+    #[Groups(['trip:read'])]
+    private ?int $duration = null;
+
+    #[ORM\Column]
+    #[Groups(['trip:read'])]
+    private array $tag = [];
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['trip:read'])]
+    private ?string $status = null;
 
     
 
@@ -319,5 +346,65 @@ class Trips
         }
         
         return round($total / $this->rating->count(), 1);
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): static
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getMaxtravelers(): ?int
+    {
+        return $this->maxtravelers;
+    }
+
+    public function setMaxtravelers(int $maxtravelers): static
+    {
+        $this->maxtravelers = $maxtravelers;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(int $duration): static
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getTag(): array
+    {
+        return $this->tag;
+    }
+
+    public function setTag(array $tag): static
+    {
+        $this->tag = $tag;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
     }
 }
