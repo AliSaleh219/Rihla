@@ -10,6 +10,8 @@ interface FilterProps {
   setPriceRange: (value: number) => void;
   selectedRating: number | null;
   setSelectedRating: (value: number | null) => void;
+  maxTravelers: number;
+  setMaxTravelers: (value: number) => void;
   onClearAll: () => void;
 }
 
@@ -53,12 +55,15 @@ export default function TripFilter({
   setPriceRange,
   selectedRating,
   setSelectedRating,
+  maxTravelers,
+  setMaxTravelers,
   onClearAll,
 }: FilterProps) {
-  const [isGovernorateOpen, setIsGovernorateOpen] = useState(true);
-  const [isTagsOpen, setIsTagsOpen] = useState(true);
-  const [isPriceOpen, setIsPriceOpen] = useState(true);
-  const [isRatingOpen, setIsRatingOpen] = useState(true);
+  const [isGovernorateOpen, setIsGovernorateOpen] = useState(false);
+  const [isTagsOpen, setIsTagsOpen] = useState(false);
+  const [isPriceOpen, setIsPriceOpen] = useState(false);
+  const [isRatingOpen, setIsRatingOpen] = useState(false);
+  const [isMaxTravelersOpen, setIsMaxTravelersOpen] = useState(false);
 
   const toggleTag = (tag: string) => {
     console.log("Toggling tag:", selectedTags, tag);
@@ -73,7 +78,8 @@ export default function TripFilter({
     selectedGovernorate !== "All Locations" ||
     selectedTags.length > 0 ||
     priceRange !== 0 ||
-    selectedRating !== null;
+    selectedRating !== null||
+    maxTravelers !== 0;
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 h-fit sticky top-6">
@@ -197,7 +203,7 @@ export default function TripFilter({
       </div>
 
       {/* Rating Filter */}
-      <div className="mb-2">
+      <div className="mb-6 pb-6 border-b border-gray-200">
         <button
           onClick={() => setIsRatingOpen(!isRatingOpen)}
           className="flex items-center justify-between w-full mb-3"
@@ -230,6 +236,41 @@ export default function TripFilter({
             {selectedRating && (
               <span className="ml-2 text-sm text-gray-700">{selectedRating} & up</span>
             )}
+          </div>
+        )}
+      </div>
+      {/*maxtravelers filter*/}
+
+      <div className="mb-6 pb-6 border-b border-gray-200">
+        <button
+          onClick={() => setIsMaxTravelersOpen(!isMaxTravelersOpen)}
+          className="flex items-center justify-between w-full mb-3"
+        >
+          <h3 className="font-medium text-gray-900">Max Travelers</h3>
+          <ChevronDown
+            className={`w-5 h-5 text-gray-500 transition-transform ${
+              isMaxTravelersOpen ? "rotate-180" : ""
+            }`}
+          />
+        </button>
+        {isMaxTravelersOpen && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between text-sm text-gray-600">
+              <span>{maxTravelers}</span>
+            </div>
+            <div className="space-y-2">
+              <input
+                type="range"
+                min="1"
+                max="100"
+                step="1"
+                value={maxTravelers}
+                onChange={(e) =>
+                  setMaxTravelers(Number(e.target.value))
+                }
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              />
+            </div>
           </div>
         )}
       </div>

@@ -14,9 +14,28 @@ const getGovernorates =  async () => {
   }
 };
 
-const getTrips = async () => {
+const getTrips = async (selectedGovernorate: string, selectedTags: string[], priceRange: number, selectedRating: number | null, maxTravelers: number) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/trips`);
+    let url = `${API_BASE_URL}/trips?`;
+    if (selectedGovernorate !== 'All Locations') {
+      url += `governorate.nameEn=${selectedGovernorate}&`;
+    }
+    if (selectedTags.length > 0) {
+      selectedTags.forEach(tag => {
+        url += `tag[]=${tag.toLowerCase()}&`;
+      });
+    }
+    if (priceRange > 0) {
+      url += `price[lte]=${priceRange}&`;
+    }
+    if (selectedRating) {
+      url += `averageRating[gte]=${selectedRating}&`;
+    }
+    if (maxTravelers > 0) {
+      url += `maxtravelers[lte]=${maxTravelers}&`;
+    }
+    console.log("Fetching trips with URL:", url);
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error("Failed to fetch trips");
     }

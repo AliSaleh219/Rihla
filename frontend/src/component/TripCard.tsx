@@ -48,7 +48,7 @@ export default function TripCard({ trip }: TripCardProps) {
         <div className="absolute bottom-3 left-3 flex flex-wrap gap-1">
           {trip.duration && (
             <span className="px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-medium text-gray-800">
-              {trip.duration}
+              {trip.duration} days
             </span>
           )}
         </div>
