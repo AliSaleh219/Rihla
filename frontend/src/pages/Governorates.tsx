@@ -3,7 +3,8 @@ import { useNavigate } from "react-router";
 import GovernorateCard from "../component/GovernorateCard";
 import { MapPin } from "lucide-react";
 import { getGovernorates } from "../component/api";
-import SkeletonProvinceCard from "../component/Skeleton/SkeletongovernorateCard";
+import SkeletonGovernorateCard from "../component/Skeleton/SkeletongovernorateCard";
+import { trips } from "../data/mockData";
 export default function Governorates() {
   const navigate = useNavigate();
   const [governorates, setGovernorates] = useState([]);
@@ -37,18 +38,17 @@ export default function Governorates() {
           {loading ? (
             <>
                {[...Array(14)].map((_, i) => (
-                    <SkeletonProvinceCard key={i}/>
+                    <SkeletonGovernorateCard key={i}/>
                 ))}
             </>
           ) : (
-            console.log(governorates),
             governorates.map((gov: { id: string; nameEn: string,tripsCount: number; coverImage: string }) => (
               <GovernorateCard
                 key={gov.id}
                 name={gov.nameEn}
                 tripsCount={gov.tripsCount}
                 image={`http://127.0.0.1:8000/images/provinces/${gov.coverImage}`}
-                onClick={() => navigate(`/trips?governorate=${gov.nameEn}`)}
+                onClick={() => navigate(`/trips`, { state: { Governorate: gov.nameEn } })}
               />
             ))
           )}

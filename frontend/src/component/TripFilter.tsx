@@ -26,10 +26,10 @@ const governorates = [
   "Deir ez-Zor",
   "Raqqa",
   "Hasakah",
-  "Qamishli",
+  "Quneitra",
   "Idlib",
   "Daraa",
-  "As-Suwayda",
+  "Al-Hasakah",
   "Rif Dimashq"
 ];
 
@@ -226,9 +226,9 @@ export default function TripFilter({
               >
                 <Star
                   className={`w-6 h-6 transition-colors ${
-                    (selectedRating ?? 1) >= star ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                    (selectedRating ?? 0) >= star ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
                   }`}
-                  fill={(selectedRating ?? 1) >= star ? "#facc15" : "none"}
+                  fill={(selectedRating ?? 0) >= star ? "#facc15" : "none"}
                   strokeWidth={1.5}
                 />
               </button>

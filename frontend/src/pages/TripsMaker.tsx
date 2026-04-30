@@ -1,11 +1,16 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import TripFilter from "../component/TripFilter";
 import TripCard from "../component/TripCard";
 import { Search } from "lucide-react";
 import { getTrips } from "../component/api";
+import SkeletonTripsCard from "../component/Skeleton/skeletonTripsCard";
 
 export default function TripsMaker() {
-  const [selectedGovernorate, setSelectedGovernorate] = useState("All Locations");
+  const location = useLocation();
+  // const queryGovernorate = new URLSearchParams(location.search).get("Governorate");
+  
+  const [selectedGovernorate, setSelectedGovernorate] = useState<string>(location.state?.Governorate || "All Locations");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number>(0);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
@@ -13,17 +18,22 @@ export default function TripsMaker() {
   const [searchQuery, setSearchQuery] = useState("");
   const [trips, setTrips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalTrips, setTotalTrips] = useState(0);
+  const tripsPerPage = 6;
 
   useEffect(() => {
     const fetchTrips = async () => {
       setLoading(true);
-      const data = await getTrips(selectedGovernorate, selectedTags, priceRange, selectedRating, maxTravelers);
+      const data = await getTrips(currentPage,selectedGovernorate, selectedTags, priceRange, selectedRating, maxTravelers);
       setTrips(data.member);
-      console.log(data.member);
+      setTotalTrips(data.totalItems);
+      console.log("Fetched trips data:", data);
       setLoading(false);
     };
     fetchTrips();
-  }, [selectedGovernorate, selectedTags, priceRange, selectedRating, maxTravelers]);
+  }, [currentPage,selectedGovernorate, selectedTags, priceRange, selectedRating, maxTravelers]);
+
 
   const handleClearAll = () => {
     setSelectedGovernorate("All Locations");
@@ -31,7 +41,12 @@ export default function TripsMaker() {
     setPriceRange(0);
     setSelectedRating(null);
     setMaxTravelers(0);
+    setSearchQuery("");
   };
+
+
+  const totalPages = Math.ceil(totalTrips / tripsPerPage);
+  const visiblePages = Array.from({ length: totalPages }, (_, index) => index + 1);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -85,7 +100,13 @@ export default function TripsMaker() {
 
           {/* Trip Cards Grid */}
           <div className="lg:col-span-3">
-            {trips.length === 0 ? (
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <SkeletonTripsCard key={i}/>
+                ))}
+              </div>
+            ) : trips.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-gray-400 text-6xl mb-4">🔍</div>
                 <h3 className="text-xl font-medium text-gray-900 mb-2">
@@ -102,11 +123,49 @@ export default function TripsMaker() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {trips.map((trip) => (
-                  <TripCard key={trip.id} trip={trip} />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {trips.map((trip) => (
+                    <TripCard key={trip.id} trip={trip} />
+                  ))}
+                </div>
+                {1 && (
+                  <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
+                    <button
+                      onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                    >
+                      Previous
+                    </button>
+
+                    {visiblePages.map((pageNumber) => (
+                      <button
+                        key={pageNumber}
+                        onClick={() => setCurrentPage(pageNumber)}
+                        className={`w-10 h-10 rounded-lg border transition-colors ${
+                          currentPage === pageNumber
+                            ? "bg-blue-600 border-blue-600 text-white"
+                            : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    ))}
+
+                    <button
+                      onClick={() => {setCurrentPage((page) => Math.min(page + 1, totalPages));
+                      localStorage.setItem("tripsCurrentPage", String(Math.min(currentPage + 1, totalPages)));
+                      }
+                      }
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

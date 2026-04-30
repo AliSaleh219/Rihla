@@ -35,6 +35,7 @@ use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
         )
     ],
     normalizationContext: ['groups' => ['trip:read']],
+    paginationItemsPerPage: 6,
 
 )]
 #[ApiFilter(SearchFilter::class, properties: ['governorate.nameEn' => 'exact', 'tag' => 'partial'])]
@@ -333,19 +334,15 @@ class Trips
 
         return $this;
     }
-    #[Groups(['trip:read'])]
     public function getAverageRating(): float
     {
-        if ($this->rating->isEmpty()) {
-            return 0;
-        }
-        
-        $total = 0;
-        foreach ($this->rating as $r) {
-            $total += $r->getRate();
-        }
-        
-        return round($total / $this->rating->count(), 1);
+        return $this->averageRating;
+    }
+    public function setAverageRating(float $averageRating): static
+    {
+        $this->averageRating = $averageRating;
+
+        return $this;
     }
 
     public function getPrice(): ?float

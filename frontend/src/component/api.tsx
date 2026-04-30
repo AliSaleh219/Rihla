@@ -14,15 +14,16 @@ const getGovernorates =  async () => {
   }
 };
 
-const getTrips = async (selectedGovernorate: string, selectedTags: string[], priceRange: number, selectedRating: number | null, maxTravelers: number) => {
+const getTrips = async (currentPage: number, selectedGovernorate: string, selectedTags: string[], priceRange: number, selectedRating: number | null, maxTravelers: number) => {
   try {
     let url = `${API_BASE_URL}/trips?`;
+    url += `page=${currentPage}&`;
     if (selectedGovernorate !== 'All Locations') {
       url += `governorate.nameEn=${selectedGovernorate}&`;
     }
     if (selectedTags.length > 0) {
       selectedTags.forEach(tag => {
-        url += `tag[]=${tag.toLowerCase()}&`;
+        url += `tag[]=${tag}&`;
       });
     }
     if (priceRange > 0) {

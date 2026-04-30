@@ -1,5 +1,5 @@
-// components/SkeletonProvinceCard.tsx
-export default function SkeletonProvinceCard() {
+// components/SkeletonGovernorateCard.tsx
+export default function SkeletonGovernorateCard() {
     return (
         <div className="rounded-xl shadow-md overflow-hidden bg-gray-200 opacity-60">
             <div className="relative h-48 overflow-hidden">
