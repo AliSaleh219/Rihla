@@ -16,6 +16,7 @@ export default function TripsMaker() {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [maxTravelers, setMaxTravelers] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [title, setTitle] = useState("");
   const [trips, setTrips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,14 +26,14 @@ export default function TripsMaker() {
   useEffect(() => {
     const fetchTrips = async () => {
       setLoading(true);
-      const data = await getTrips(currentPage,selectedGovernorate, selectedTags, priceRange, selectedRating, maxTravelers);
+      const data = await getTrips(currentPage,title,selectedGovernorate, selectedTags, priceRange, selectedRating, maxTravelers);
       setTrips(data.member);
       setTotalTrips(data.totalItems);
       console.log("Fetched trips data:", data);
       setLoading(false);
     };
     fetchTrips();
-  }, [currentPage,selectedGovernorate, selectedTags, priceRange, selectedRating, maxTravelers]);
+  }, [currentPage,title,selectedGovernorate, selectedTags, priceRange, selectedRating, maxTravelers]);
 
 
   const handleClearAll = () => {
@@ -42,6 +43,7 @@ export default function TripsMaker() {
     setSelectedRating(null);
     setMaxTravelers(0);
     setSearchQuery("");
+    setTitle("");
   };
 
 
@@ -71,6 +73,7 @@ export default function TripsMaker() {
             </div>
             <button
               className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              onClick={() => setTitle(searchQuery)}
             >
               Search
             </button>

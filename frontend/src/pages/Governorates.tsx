@@ -4,7 +4,6 @@ import GovernorateCard from "../component/GovernorateCard";
 import { MapPin } from "lucide-react";
 import { getGovernorates } from "../component/api";
 import SkeletonGovernorateCard from "../component/Skeleton/SkeletongovernorateCard";
-import { trips } from "../data/mockData";
 export default function Governorates() {
   const navigate = useNavigate();
   const [governorates, setGovernorates] = useState([]);
@@ -18,7 +17,14 @@ export default function Governorates() {
     };
     fetchGovernorates();
   }, []);
+  const governoratesSorted = [...governorates].sort((a: { tripsCount: number }, b: { tripsCount: number }) => {
+        const aHasTrips = a.tripsCount > 0;
+        const bHasTrips = b.tripsCount > 0;
 
+        if (aHasTrips && !bHasTrips) return -1;
+        if (!aHasTrips && bHasTrips) return 1;
+        return 0;
+    });
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -42,7 +48,7 @@ export default function Governorates() {
                 ))}
             </>
           ) : (
-            governorates.map((gov: { id: string; nameEn: string,tripsCount: number; coverImage: string }) => (
+            governoratesSorted.map((gov: { id: string; nameEn: string,tripsCount: number; coverImage: string }) => (
               <GovernorateCard
                 key={gov.id}
                 name={gov.nameEn}

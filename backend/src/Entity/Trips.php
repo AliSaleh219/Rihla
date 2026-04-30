@@ -38,7 +38,7 @@ use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
     paginationItemsPerPage: 6,
 
 )]
-#[ApiFilter(SearchFilter::class, properties: ['governorate.nameEn' => 'exact', 'tag' => 'partial'])]
+#[ApiFilter(SearchFilter::class, properties: ['governorate.nameEn' => 'exact', 'tag' => 'partial', 'title' => 'partial'])]
 #[ApiFilter(RangeFilter::class, properties: ['price', 'maxtravelers', 'averageRating'])]
 class Trips
 {
