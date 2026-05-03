@@ -10,11 +10,12 @@ import ReactDOM from "react-dom/client";
 import Home from "./pages/Home.tsx";
 import Footer from "./component/footer.tsx";
 import Governorates from "./pages/Governorates.tsx";
+import ScrollToTop from "./component/scrollToTop.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    
     <BrowserRouter>
       <Navbar />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/governorates" element={<Governorates />} />
