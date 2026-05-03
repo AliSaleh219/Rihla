@@ -51,4 +51,42 @@ const getTrips = async (currentPage: number, title: string, selectedGovernorate:
     throw error;
   }
 }
-export { getGovernorates, getTrips };
+const addUser= async (userData: { fullname: string; phone: string; email: string; username: string; password: string }) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to add user");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error adding user:", error);
+    throw error;
+  }
+};
+const loginUser = async (credentials: { email: string; password: string }) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to login");
+    }
+    const data = await response.json();
+    localStorage.setItem("token", data.token);
+  } catch (error) {
+    console.error("Error logging in:", error);
+    throw error;
+  }
+};
+export { getGovernorates, getTrips, addUser, loginUser };
