@@ -72,9 +72,8 @@ export default function TripCard({ trip }: TripCardProps) {
         <div className="flex items-center justify-between">
           <div>
             <span className="text-2xl font-bold text-gray-900">
-              {trip.price}
+              {trip.price}$
             </span>
-            <span className="text-sm text-gray-500 ml-1">/ person</span>
           </div>
         </div>
       </div>

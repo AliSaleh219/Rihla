@@ -40,7 +40,7 @@ const tags = [
   "Desert",
   "Family-Friendly",
   "Luxury",
-  "Historical",
+  "Historic",
   "Nature",
   "Romantic",
   "Budget-Friendly",
