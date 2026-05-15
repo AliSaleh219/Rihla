@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ItineraryActivityRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
+
 
 #[ORM\Entity(repositoryClass: ItineraryActivityRepository::class)]
 #[ApiResource]
@@ -13,18 +15,23 @@ class ItineraryActivity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['day:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 10, nullable: true)]
+    #[Groups(['day:read'])]
     private ?string $time = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['day:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['day:read'])]
     private ?string $detail = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['day:read'])]
     private ?string $type = null;
 
     #[ORM\Column(nullable: true)]

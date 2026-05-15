@@ -8,32 +8,46 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Attribute\Groups;
+
 
 #[ORM\Entity(repositoryClass: ItineraryDayRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['day:read']],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['trip' => 'exact'])]
+
 class ItineraryDay
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['day:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['day:read'])]
     private ?int $dayNumber = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['day:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['day:read'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'itineraryDays')]
+    #[Groups(['day:read'])]
     private ?Trips $trip = null;
 
     /**
      * @var Collection<int, ItineraryActivity>
      */
     #[ORM\OneToMany(targetEntity: ItineraryActivity::class, mappedBy: 'day')]
+    #[Groups(['day:read'])]
     private Collection $itineraryActivities;
 
     public function __construct()
