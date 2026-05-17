@@ -1,21 +1,13 @@
 const API_BASE_URL = "http://127.0.0.1:8000/api";
 
 const getGovernorates =  async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/governorates`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch governorates");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching governorates:", error);
-    throw error;
+  const response = await fetch(`${API_BASE_URL}/governorates`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch governorates");
   }
-};
-
+  return response.json();
+}
 const getTrips = async (currentPage: number, title: string, selectedGovernorate: string, selectedTags: string[], priceRange: number, selectedRating: number | null, maxTravelers: number) => {
-  try {
     let url = `${API_BASE_URL}/trips?`;
     url += `page=${currentPage}&`;
     if (title) {
@@ -37,22 +29,16 @@ const getTrips = async (currentPage: number, title: string, selectedGovernorate:
       url += `averageRating[gte]=${selectedRating}&`;
     }
     if (maxTravelers > 0) {
-      url += `maxtravelers[lte]=${maxTravelers}&`;
+      url += `maxtravelers[gte]=${maxTravelers}&`;
     }
     console.log("Fetching trips with URL:", url);
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error("Failed to fetch trips");
     }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching trips:", error);
-    throw error;
-  }
+    return  response.json();
 }
 const addUser= async (userData: { fullname: string; phone: string; email: string; username: string; password: string }) => {
-  try {
     const response = await fetch(`${API_BASE_URL}/users`, {
       method: "POST",
       headers: {
@@ -63,15 +49,9 @@ const addUser= async (userData: { fullname: string; phone: string; email: string
     if (!response.ok) {
       throw new Error("Failed to add user");
     }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error adding user:", error);
-    throw error;
-  }
+    return  response.json();
 };
 const loginUser = async (credentials: { email: string; password: string }) => {
-  try {
     const response = await fetch(`${API_BASE_URL}/login`, {
       method: "POST",
       headers: {
@@ -82,11 +62,20 @@ const loginUser = async (credentials: { email: string; password: string }) => {
     if (!response.ok) {
       throw new Error("Failed to login");
     }
-    const data = await response.json();
-    localStorage.setItem("token", data.token);
-  } catch (error) {
-    console.error("Error logging in:", error);
-    throw error;
-  }
+    return  response.json();
 };
-export { getGovernorates, getTrips, addUser, loginUser };
+const getTripDetails = async (tripId: number) => {
+    const response = await fetch(`${API_BASE_URL}/trips/${tripId}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch trip details");
+    }
+    return  response.json();
+};
+const getdays = async (tripId: number) => {
+    const response = await fetch(`${API_BASE_URL}/itinerary_days?trip=${tripId}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch days");
+    }
+    return  response.json();
+}
+export { getGovernorates, getTrips, addUser, loginUser, getTripDetails, getdays };
