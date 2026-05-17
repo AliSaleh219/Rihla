@@ -1,6 +1,6 @@
 import { MapPin, Star, Heart } from "lucide-react";
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 interface Trip {
   id: number;
   title: string;
@@ -24,9 +24,12 @@ interface TripCardProps {
 
 export default function TripCard({ trip }: TripCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
-
+  const navigate = useNavigate();
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+    <div 
+    className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
+    onClick={() => navigate(`/trips/${trip.id}`)}
+    >
       <div className="relative">
         <img
           src={`http://127.0.0.1:8000/images/trips/${trip.image}`}
