@@ -66,7 +66,7 @@ export default function Home() {
   useEffect(() => {
     const fetchTrips = async () => {
       setTripsLoading(true);
-      const data = await getTrips(1,"All Locations", [], 0, null, 0);
+      const data = await getTrips(1,"","All Locations", [], 0, null, 0);
       setTrip(data.member);
       setTripsLoading(false);
     };
