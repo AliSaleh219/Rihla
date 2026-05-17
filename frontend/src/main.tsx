@@ -11,6 +11,8 @@ import Home from "./pages/Home.tsx";
 import Footer from "./component/footer.tsx";
 import Governorates from "./pages/Governorates.tsx";
 import ScrollToTop from "./component/scrollToTop.tsx";
+import ChatBot from "./pages/ai.tsx";
+import TripDetails from "./pages/TripDetails.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
@@ -22,7 +24,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/recommendation" element={<Recommendation />} />
         <Route path="/trips" element={<TripsMaker />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} /> 
+        <Route path="/register" element={<Register />} />
+        <Route path="/chat" element={<ChatBot />} /> 
+        <Route path="/trips/:id" element={<TripDetails/>}/>
       </Routes>
       <Footer />
     </BrowserRouter>
