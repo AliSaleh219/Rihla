@@ -19,7 +19,7 @@ const getTrips = async (currentPage: number, title: string, selectedGovernorate:
     }
     if (selectedTags.length > 0) {
       selectedTags.forEach(tag => {
-        url += `tag[]=${tag}&`;
+        url += `tag[]=${tag.toLowerCase()}&`;
       });
     }
     if (priceRange > 0) {
