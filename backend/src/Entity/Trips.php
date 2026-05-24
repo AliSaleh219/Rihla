@@ -22,7 +22,7 @@ use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
 #[ORM\Entity(repositoryClass: TripsRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(),        
+        new GetCollection(),
         new Post(
             uriTemplate: '/trips',
             controller: TripMakerController::class,
@@ -121,7 +121,8 @@ class Trips
     #[Groups(['trip:read'])]
     private ?string $status = null;
 
-    
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $TripDate = null;
 
     public function __construct()
     {
@@ -404,4 +405,18 @@ class Trips
 
         return $this;
     }
+
+    public function getTripDate(): ?\DateTimeImmutable
+    {
+        return $this->TripDate;
+    }
+
+    public function setTripDate(\DateTimeImmutable $TripDate): static
+    {
+        $this->TripDate = $TripDate;
+
+        return $this;
+    }
+
+
 }
