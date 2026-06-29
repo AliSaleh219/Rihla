@@ -1,0 +1,11 @@
+gesdinet_jwt_refresh_token:
+    refresh_token_class: Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken
+    ttl: 604800       # 7 أيام بالثواني
+    ttl_update: true  # sliding ← بتتجدد كل استخدام ✅
+    single_use: true  # rotation ← كل توكن بيستخدم مرة وحدة ✅
+    cookie:
+        enabled: true
+        same_site: strict
+        http_only: true
+        secure: falses
+        path: /api/token/refresh  # بس بيتبعت لهاد الـ endpoint

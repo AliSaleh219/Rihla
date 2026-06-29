@@ -15,6 +15,3 @@ app_redirect:
     defaults:
         path: /api
         permanent: false
-api_login:
-    path: /api/login
-    methods: [POST]
